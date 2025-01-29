@@ -49,7 +49,7 @@ public class BetterAdventureModeClient implements ClientModInitializer
 			context.client().execute(() ->
 			{
 				CustomHungerManager hungerManager = (CustomHungerManager)context.client().player.getHungerManager();
-				hungerManager.removeFoodInSlot(payload.slot());
+				hungerManager.itemsEaten[payload.slot()] = null;
 			});
 		});
 	}

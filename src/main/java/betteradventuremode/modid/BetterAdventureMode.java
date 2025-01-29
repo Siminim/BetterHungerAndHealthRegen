@@ -25,9 +25,8 @@ public class BetterAdventureMode implements ModInitializer
 	public void onInitialize() 
 	{
 		registerPayloads();
+		Commands.onInitialize();
 		setPlayerMaxHealthEvents();
-
-		
 	}
 
 	private void setPlayerMaxHealthEvents()

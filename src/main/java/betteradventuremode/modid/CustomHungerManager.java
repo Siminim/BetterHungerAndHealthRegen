@@ -145,8 +145,6 @@ public class CustomHungerManager extends HungerManager
             itemsEaten[i] = itemStack;
             itemsEatenTime[i] = timeLeft;
         }
-
-
         updateMaxHealth();
     }
 
