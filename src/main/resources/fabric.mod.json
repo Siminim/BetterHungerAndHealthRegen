@@ -1,0 +1,46 @@
+{
+	"schemaVersion": 1,
+	"id": "better-adventure-mode",
+	"version": "0.0.1",
+	"name": "Better Adventure Mode",
+	"description": "An improvement upon minecrafts adventure mechanics.",
+	"authors": 
+	[
+		"Siminim"
+	],
+	"contact": 
+	{
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/better-adventure-mode/icon.png",
+	"environment": "*",
+	"entrypoints": 
+	{
+		"main": [
+			"betteradventuremode.modid.BetterAdventureMode"
+		],
+		"client": [
+			"betteradventuremode.modid.BetterAdventureModeClient"
+		],
+		"fabric-datagen": [
+			"betteradventuremode.modid.BetterAdventureModeDataGenerator"
+		]
+	},
+	"mixins": 
+	[
+		"better-adventure-mode.mixins.json"
+	],
+	"depends": 
+	{
+		"fabricloader": ">=0.16.10",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": 
+	{
+		"another-mod": "*"
+	}
+}

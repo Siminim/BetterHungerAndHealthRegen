@@ -1,0 +1,28 @@
+{
+	"required": true,
+	"package": "betteradventuremode.modid.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": 
+	[
+		"PlayerEntityMixin",
+		"FoodSettingsMixin",
+		"FoodItemsMixin",
+		"FoodComponentMixin"
+	],
+	"client": 
+	[
+		"MixinInGameHud"
+	],
+	"server":
+	[
+		"PlayerEntityMixin",
+		"FoodSettingsMixin",
+		"FoodItemsMixin",
+		"FoodComponentMixin"
+	],
+
+	"injectors": 
+	{
+		"defaultRequire": 1
+	}
+}
