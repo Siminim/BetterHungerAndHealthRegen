@@ -16,7 +16,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 
 public class CustomHungerManager extends HungerManager
 {
@@ -52,6 +51,8 @@ public class CustomHungerManager extends HungerManager
     public void eat(FoodComponent food, ItemStack item)
     {
         ModdedFoodComponent mfood = ModdedFoodComponent.getModdedFoodComponent(food); 
+        if (mfood == null)
+            return;
 
         for (int i = 0; i < maxFoodItems; i++)
         {
@@ -157,11 +158,14 @@ public class CustomHungerManager extends HungerManager
         }
 	}
 
+    // Takes 20 seconds to regenerate health starting from when you first lose health.
+    // I want to implement a system that resets (or lowers) the counter when you take damage.
+    // Sturdy variable in foods which would help with getting hit and losing regeneration time.
     private void regenerationCounter()
     {
         regenTime += 1.0f;
 
-        if (regenTime < 200.0f)
+        if (regenTime < 400.0f)
             return;
 
         float regen = 0.0f;
