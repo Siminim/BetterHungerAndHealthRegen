@@ -49,32 +49,26 @@ public class CustomHungerManager extends HungerManager
             updateFoodTimesOnClient();
     }
 
-
     public void eat(FoodComponent food, ItemStack item)
     {
+        ModdedFoodComponent mfood = ModdedFoodComponent.getModdedFoodComponent(food); 
+
         for (int i = 0; i < maxFoodItems; i++)
         {
             if (itemsEaten[i] == null)
             {
                 itemsEaten[i] = new ItemStack(item.getRegistryEntry());
-                
-                float ticks = food.saturation() * 20.0f;
-                itemsEatenTime[i] = (int)ticks;
+                itemsEatenTime[i] = mfood.getDuration();
 
                 updateMaxHealth();
                 break;
             }
             else if (item.getItem() == itemsEaten[i].getItem())
             {
-                float ticks = food.saturation() * 20.0f;
-                itemsEatenTime[i] = (int)ticks;
+                itemsEatenTime[i] = mfood.getDuration();
                 break;
             }
         }
-
-        ModdedFoodComponent mfood = ModdedFoodComponent.getModdedFoodComponent(food);
-        if (mfood != null)
-            player.sendMessage(Text.of(String.valueOf(mfood.getRegeneration())));
         
         updateFoodOnClient();
     }
@@ -137,14 +131,15 @@ public class CustomHungerManager extends HungerManager
     public void updateMaxHealth()
     {
         float health = NEW_MAX_HEALTH;
+        
         for (int i = 0; i < maxFoodItems; i++)
         {
             if (itemsEaten[i] == null)
                 break;
 
             FoodComponent food = itemsEaten[i].get(DataComponentTypes.FOOD);
-            health += (float)food.nutrition();
-
+            ModdedFoodComponent mfood = ModdedFoodComponent.getModdedFoodComponent(food);
+            health += mfood.getHealthBoost();
         }
 
         setPlayerMaxHealth(player, health);
@@ -166,7 +161,7 @@ public class CustomHungerManager extends HungerManager
     {
         regenTime += 1.0f;
 
-        if (regenTime < 20.0f)
+        if (regenTime < 200.0f)
             return;
 
         float regen = 0.0f;

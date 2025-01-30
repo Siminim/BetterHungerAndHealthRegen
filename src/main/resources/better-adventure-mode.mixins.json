@@ -5,7 +5,6 @@
 	"mixins": 
 	[
 		"PlayerEntityMixin",
-		"FoodSettingsMixin",
 		"FoodItemsMixin",
 		"FoodComponentBuilderMixin"
 	],
@@ -16,7 +15,6 @@
 	"server":
 	[
 		"PlayerEntityMixin",
-		"FoodSettingsMixin",
 		"FoodItemsMixin",
 		"FoodComponentBuilderMixin"
 	],

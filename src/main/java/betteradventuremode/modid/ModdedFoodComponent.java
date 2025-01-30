@@ -14,64 +14,79 @@ public class ModdedFoodComponent
         return FoodMap.get(foodComponent);
     }
 
+    // Nutrition is used for the health increase. Give health in 2's.
+    // Satuartion is used on the time in seconds. Giving an extra 60s feels better.
     public static void onInitialize()
     {
-        new ModdedFoodComponent(FoodComponents.APPLE, 1.5f);
-        new ModdedFoodComponent(FoodComponents.BAKED_POTATO, 1.5f);
-        new ModdedFoodComponent(FoodComponents.BEEF, 1.5f);
-        new ModdedFoodComponent(FoodComponents.BEETROOT, 1.5f);
-        new ModdedFoodComponent(FoodComponents.BEETROOT_SOUP, 1.5f);
-        new ModdedFoodComponent(FoodComponents.BREAD, 1.5f);
-        new ModdedFoodComponent(FoodComponents.CARROT, 1.5f);
-        new ModdedFoodComponent(FoodComponents.CHICKEN, 1.5f);
-        new ModdedFoodComponent(FoodComponents.CHORUS_FRUIT, 1.5f);
-        new ModdedFoodComponent(FoodComponents.COD, 1.5f);
-        new ModdedFoodComponent(FoodComponents.COOKED_BEEF, 1.5f);
-        new ModdedFoodComponent(FoodComponents.COOKED_CHICKEN, 1.5f);
-        new ModdedFoodComponent(FoodComponents.COOKED_COD, 1.5f);
-        new ModdedFoodComponent(FoodComponents.COOKED_MUTTON, 1.5f);
-        new ModdedFoodComponent(FoodComponents.COOKED_PORKCHOP, 1.5f);
-        new ModdedFoodComponent(FoodComponents.COOKED_RABBIT, 1.5f);
-        new ModdedFoodComponent(FoodComponents.COOKED_SALMON, 1.5f);
-        new ModdedFoodComponent(FoodComponents.COOKIE, 1.5f);
-        new ModdedFoodComponent(FoodComponents.DRIED_KELP, 1.5f);
-        new ModdedFoodComponent(FoodComponents.ENCHANTED_GOLDEN_APPLE, 1.5f);
-        new ModdedFoodComponent(FoodComponents.GLOW_BERRIES, 1.5f);
-        new ModdedFoodComponent(FoodComponents.GOLDEN_APPLE, 1.5f);
-        new ModdedFoodComponent(FoodComponents.GOLDEN_CARROT, 1.5f);
-        new ModdedFoodComponent(FoodComponents.HONEY_BOTTLE, 1.5f);
-        new ModdedFoodComponent(FoodComponents.MELON_SLICE, 1.5f);
-        new ModdedFoodComponent(FoodComponents.MUSHROOM_STEW, 1.5f);
-        new ModdedFoodComponent(FoodComponents.MUTTON, 1.5f);
-        new ModdedFoodComponent(FoodComponents.OMINOUS_BOTTLE, 1.5f);
-        new ModdedFoodComponent(FoodComponents.POISONOUS_POTATO, 1.5f);
-        new ModdedFoodComponent(FoodComponents.PORKCHOP, 1.5f);
-        new ModdedFoodComponent(FoodComponents.POTATO, 1.5f);
-        new ModdedFoodComponent(FoodComponents.PUFFERFISH, 1.5f);
-        new ModdedFoodComponent(FoodComponents.PUMPKIN_PIE, 1.5f);
-        new ModdedFoodComponent(FoodComponents.RABBIT, 1.5f);
-        new ModdedFoodComponent(FoodComponents.RABBIT_STEW, 1.5f);
-        new ModdedFoodComponent(FoodComponents.ROTTEN_FLESH, 1.5f);
-        new ModdedFoodComponent(FoodComponents.SALMON, 1.5f);
-        new ModdedFoodComponent(FoodComponents.SPIDER_EYE, 1.5f);
-        new ModdedFoodComponent(FoodComponents.SUSPICIOUS_STEW, 1.5f);
-        new ModdedFoodComponent(FoodComponents.SWEET_BERRIES, 1.5f);
-        new ModdedFoodComponent(FoodComponents.TROPICAL_FISH, 1.5f);
+        new ModdedFoodComponent(FoodComponents.APPLE, 2, 1.5f, 360);
+        new ModdedFoodComponent(FoodComponents.BAKED_POTATO, 4, 1.5f, 960);
+        new ModdedFoodComponent(FoodComponents.BEEF, 2, 1.5f, 360);
+        new ModdedFoodComponent(FoodComponents.BEETROOT, 2, 1.5f, 360);
+        new ModdedFoodComponent(FoodComponents.BEETROOT_SOUP, 8, 1.5f, 1860);
+        new ModdedFoodComponent(FoodComponents.BREAD, 4, 1.5f, 660);
+        new ModdedFoodComponent(FoodComponents.CARROT, 2, 1.5f, 360);
+        new ModdedFoodComponent(FoodComponents.CHICKEN, 4, 1.5f, 360);
+        new ModdedFoodComponent(FoodComponents.CHORUS_FRUIT, 2, 1.5f, 180);
+        new ModdedFoodComponent(FoodComponents.COD, 2, 1.5f, 360);
+        new ModdedFoodComponent(FoodComponents.COOKED_BEEF, 6, 1.5f, 1260);
+        new ModdedFoodComponent(FoodComponents.COOKED_CHICKEN, 4, 1.5f, 960);
+        new ModdedFoodComponent(FoodComponents.COOKED_COD, 4, 1.5f, 960);
+        new ModdedFoodComponent(FoodComponents.COOKED_MUTTON, 4, 1.5f, 960);
+        new ModdedFoodComponent(FoodComponents.COOKED_PORKCHOP, 6, 1.5f, 1260);
+        new ModdedFoodComponent(FoodComponents.COOKED_RABBIT, 4, 1.5f, 960);
+        new ModdedFoodComponent(FoodComponents.COOKED_SALMON, 4, 1.5f, 960);
+        new ModdedFoodComponent(FoodComponents.COOKIE, 2, 1.5f, 180);
+        new ModdedFoodComponent(FoodComponents.DRIED_KELP, 2, 1.5f, 120);
+        new ModdedFoodComponent(FoodComponents.ENCHANTED_GOLDEN_APPLE, 6, 1.5f, 660);
+        new ModdedFoodComponent(FoodComponents.GLOW_BERRIES, 2, 1.5f, 360);
+        new ModdedFoodComponent(FoodComponents.GOLDEN_APPLE, 4, 1.5f, 660);
+        new ModdedFoodComponent(FoodComponents.GOLDEN_CARROT, 6, 1.5f, 660);
+        new ModdedFoodComponent(FoodComponents.HONEY_BOTTLE, 2, 1.5f, 360);
+        new ModdedFoodComponent(FoodComponents.MELON_SLICE, 2, 1.5f, 180);
+        new ModdedFoodComponent(FoodComponents.MUSHROOM_STEW, 6, 1.5f, 1860);
+        new ModdedFoodComponent(FoodComponents.MUTTON, 4, 1.5f, 360);
+        new ModdedFoodComponent(FoodComponents.OMINOUS_BOTTLE, 2, 1.5f, 10);
+        new ModdedFoodComponent(FoodComponents.POISONOUS_POTATO, 2, 1.5f, 120);
+        new ModdedFoodComponent(FoodComponents.PORKCHOP, 2, 1.5f, 1260);
+        new ModdedFoodComponent(FoodComponents.POTATO, 2, 1.5f, 360);
+        new ModdedFoodComponent(FoodComponents.PUFFERFISH, 2, 1.5f, 120);
+        new ModdedFoodComponent(FoodComponents.PUMPKIN_PIE, 6, 1.5f, 1260);
+        new ModdedFoodComponent(FoodComponents.RABBIT, 2, 1.5f, 360);
+        new ModdedFoodComponent(FoodComponents.RABBIT_STEW, 6, 1.5f, 1860);
+        new ModdedFoodComponent(FoodComponents.ROTTEN_FLESH, 2, 1.5f, 60);
+        new ModdedFoodComponent(FoodComponents.SALMON, 2, 1.5f, 360);
+        new ModdedFoodComponent(FoodComponents.SPIDER_EYE, 2, 1.5f, 60);
+        new ModdedFoodComponent(FoodComponents.SUSPICIOUS_STEW, 2, 1.5f, 360);
+        new ModdedFoodComponent(FoodComponents.SWEET_BERRIES, 2, 1.5f, 180);
+        new ModdedFoodComponent(FoodComponents.TROPICAL_FISH, 2, 1.5f, 360);
     }
 
     private float regenAmount;
-    private float regenTime;
-    private int healthMod;
-    private int timeTicks;
+    //private float regenTime;
+    private int health;
+    private int duration;
 
-    public ModdedFoodComponent(FoodComponent foodComponent, float regenAmount)
+    public ModdedFoodComponent(FoodComponent foodComponent, int health, float regenAmount, int duration)
     {
         this.regenAmount = regenAmount;
+        this.health = health;
+        this.duration = duration * 20;
+
         FoodMap.put(foodComponent, this);
     }
 
     public float getRegeneration()
     {
         return regenAmount;
+    }
+
+    public int getHealthBoost()
+    {
+        return health;
+    }
+
+    public int getDuration()
+    {
+        return duration;
     }
 }

@@ -13,6 +13,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+
 import betteradventuremode.modid.CustomHungerManager;
 
 @Mixin(PlayerEntity.class)
@@ -40,6 +42,12 @@ public class PlayerEntityMixin
     private void replaceHungerEat(World world, ItemStack stack, FoodComponent foodComponent, CallbackInfoReturnable<ItemStack> cir) 
     {
         customHungerManager.eat(foodComponent, stack);
+    }
+
+    @ModifyReturnValue(method = "canConsume", at = @At(value = "RETURN"))
+    public boolean replaceCanConsume(boolean ignoreHunger) 
+    {
+        return true;
     }
 
 
