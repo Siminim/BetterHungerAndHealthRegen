@@ -1,6 +1,7 @@
-package betteradventuremode.modid.network;
+package betteradventuremode.modid.network.Payloads;
 
 
+import betteradventuremode.modid.network.PacketIDs;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;

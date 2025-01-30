@@ -1,11 +1,14 @@
 package betteradventuremode.modid;
 
-import betteradventuremode.modid.network.FoodEatenPayload;
-import betteradventuremode.modid.network.FoodEmptyPayload;
-import betteradventuremode.modid.network.FoodTimeLeftPayload;
+import betteradventuremode.modid.network.Payloads.FoodEatenPayload;
+import betteradventuremode.modid.network.Payloads.FoodEmptyPayload;
+import betteradventuremode.modid.network.Payloads.FoodTimeLeftPayload;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -13,16 +16,21 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 
 public class CustomHungerManager extends HungerManager
 {
     private static final int MAX_FOOD_LEVEL = 20;
     private static final float MAX_SATURATION_LEVEL = MAX_FOOD_LEVEL;
-
+    
+    // should be in a config file
     public static final int maxFoodItems = 3;
+    public static final float NEW_MAX_HEALTH = 6.0f; 
 
     public ItemStack[] itemsEaten = new ItemStack[maxFoodItems];
     public int[] itemsEatenTime = new int[maxFoodItems];
+
+    private float regenTime = 0.0f;
 
     private final PlayerEntity player;
 
@@ -32,16 +40,15 @@ public class CustomHungerManager extends HungerManager
     }
 
     @Override
-    public void add(int hunger, float saturation)
+    public void update(PlayerEntity player)
     {
-        player.heal(hunger);
+        foodCountDown();
+        regenerationCounter();
+
+        if (!player.getWorld().isClient())
+            updateFoodTimesOnClient();
     }
 
-    @Override
-    public void eat(FoodComponent food)
-    {
-        // add(food.nutrition(), food.saturation());
-    }
 
     public void eat(FoodComponent food, ItemStack item)
     {
@@ -65,23 +72,11 @@ public class CustomHungerManager extends HungerManager
             }
         }
 
+        ModdedFoodComponent mfood = ModdedFoodComponent.getModdedFoodComponent(food);
+        if (mfood != null)
+            player.sendMessage(Text.of(String.valueOf(mfood.getRegeneration())));
+        
         updateFoodOnClient();
-    }
-
-    public void updateMaxHealth()
-    {
-        float health = BetterAdventureMode.NEW_MAX_HEALTH;
-        for (int i = 0; i < maxFoodItems; i++)
-        {
-            if (itemsEaten[i] == null)
-                break;
-
-            FoodComponent food = itemsEaten[i].get(DataComponentTypes.FOOD);
-            health += (float)food.nutrition();
-
-        }
-
-        BetterAdventureMode.setPlayerMaxHealth(player, health);
     }
 
     private void foodCountDown()
@@ -101,7 +96,7 @@ public class CustomHungerManager extends HungerManager
         }
     }
 
-    public void removeFoodInSlot(int slot)
+    private void removeFoodInSlot(int slot)
     {
         itemsEaten[slot] = null;
 
@@ -119,14 +114,136 @@ public class CustomHungerManager extends HungerManager
         }
     }
 
-    @Override
-    public void update(PlayerEntity player)
+    public void clearFoods()
     {
-        foodCountDown();
-
+        for (int i = 0; i < maxFoodItems; i++)
+        {
+            itemsEaten[i] = null;
+            itemsEatenTime[i] = 0;
+        }
+        
         if (!player.getWorld().isClient())
+        {
+            updateFoodOnClient();
             updateFoodTimesOnClient();
+            updateMaxHealth();
+        }
     }
+
+    // ------------------------------------------------------------------
+    // -------------------- Health Related methods ----------------------
+    // ------------------------------------------------------------------
+
+    public void updateMaxHealth()
+    {
+        float health = NEW_MAX_HEALTH;
+        for (int i = 0; i < maxFoodItems; i++)
+        {
+            if (itemsEaten[i] == null)
+                break;
+
+            FoodComponent food = itemsEaten[i].get(DataComponentTypes.FOOD);
+            health += (float)food.nutrition();
+
+        }
+
+        setPlayerMaxHealth(player, health);
+    }
+
+    private void setPlayerMaxHealth(PlayerEntity player, float health) 
+	{
+		// Access the max health attribute and set its base value
+        player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(health);
+
+        // Ensure the player's health is not greater than the new max health
+        if (player.getHealth() > health) 
+		{
+            player.setHealth((float) health);
+        }
+	}
+
+    private void regenerationCounter()
+    {
+        regenTime += 1.0f;
+
+        if (regenTime < 20.0f)
+            return;
+
+        float regen = 0.0f;
+        for (int i = 0; i < maxFoodItems; i++)
+        {
+            if (itemsEaten[i] == null)
+                break;
+
+            FoodComponent food = itemsEaten[i].get(DataComponentTypes.FOOD);
+            regen += ModdedFoodComponent.getModdedFoodComponent(food).getRegeneration();
+        }
+        player.heal(regen);
+        regenTime = 0.0f;
+    }
+
+    // ------------------------------------------------------------------
+    // ----------------------- Static methods ---------------------------
+    // ------------------------------------------------------------------
+
+    public static void updatePlayerHungerManager(PlayerEntity player)
+	{
+		CustomHungerManager hungerManager = (CustomHungerManager)player.getHungerManager();
+		hungerManager.updateFoodOnClient();
+		hungerManager.updateFoodTimesOnClient();
+		hungerManager.updateMaxHealth();
+	}
+
+	public static void setPlayerHungerManagerEvents()
+	{
+		// On Player Respawn
+		ServerPlayerEvents.COPY_FROM.register((oldPlayer, newPlayer, alive) -> 
+		{
+			CustomHungerManager.updatePlayerHungerManager(newPlayer);
+		});
+
+		// On Player Join Server
+		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> 
+		{
+			CustomHungerManager.updatePlayerHungerManager(handler.getPlayer());
+        });
+	}
+
+    // ------------------------------------------------------------------
+    // -------------------- Send Packets to Client ----------------------
+    // ------------------------------------------------------------------
+    
+    public void updateFoodOnClient()
+    {
+        if (player.getWorld().isClient())
+            return;
+
+        for (int i = 0; i < maxFoodItems; i++)
+        {
+            if (itemsEaten[i] == null)
+                ServerPlayNetworking.send((ServerPlayerEntity)player, new FoodEmptyPayload(i));
+            else
+                ServerPlayNetworking.send((ServerPlayerEntity)player, new FoodEatenPayload(itemsEaten[i], i));
+        }
+    }
+
+    public void updateFoodTimesOnClient()
+    {
+        if (player.getWorld().isClient())
+            return;
+
+        for (int i = 0; i < maxFoodItems; i++)
+        {
+            if (itemsEatenTime[i] <= 0 || itemsEatenTime[0] % 20 != 0)
+                break;
+
+            ServerPlayNetworking.send((ServerPlayerEntity)player, new FoodTimeLeftPayload(itemsEatenTime[i], i));
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // --------------------- Read and Write Data ------------------------
+    // ------------------------------------------------------------------
 
     @Override
     public void readNbt(NbtCompound nbt)
@@ -169,63 +286,34 @@ public class CustomHungerManager extends HungerManager
         nbt.put("FoodItems", nbtList);
     }
 
-    public void updateFoodOnClient()
-    {
-        if (player.getWorld().isClient())
-            return;
+    // ------------------------------------------------------------------
+    // --------------------- Client Only Methods ------------------------
+    // ------------------------------------------------------------------
 
-        for (int i = 0; i < maxFoodItems; i++)
-        {
-            if (itemsEaten[i] == null)
-                ServerPlayNetworking.send((ServerPlayerEntity)player, new FoodEmptyPayload(i));
-            else
-                ServerPlayNetworking.send((ServerPlayerEntity)player, new FoodEatenPayload(itemsEaten[i], i));
-        }
-    }
-
-    public void updateFoodTimesOnClient()
-    {
-        if (player.getWorld().isClient())
-            return;
-
-        for (int i = 0; i < maxFoodItems; i++)
-        {
-            if (itemsEatenTime[i] <= 0 || itemsEatenTime[0] % 20 != 0)
-                break;
-
-            ServerPlayNetworking.send((ServerPlayerEntity)player, new FoodTimeLeftPayload(itemsEatenTime[i], i));
-        }
-    }
-
-    public void clearFoods()
-    {
-        for (int i = 0; i < maxFoodItems; i++)
-        {
-            itemsEaten[i] = null;
-            itemsEatenTime[i] = 0;
-        }
-        
-        if (!player.getWorld().isClient())
-        {
-            updateFoodOnClient();
-            updateFoodTimesOnClient();
-            updateMaxHealth();
-        }
-    }
-
-    // Client Only
      public void setFoodEaten(ItemStack item, int slot)
     {
         if (player.getWorld().isClient())
             itemsEaten[slot] = item;
     }
 
-    // Client Only
     public void setTimeLeft(int timeLeft, int slot)
     {
         if (player.getWorld().isClient())
             itemsEatenTime[slot] = timeLeft;
     }
+
+
+    // ------------------------------------------------------------------
+    // --------------------- Disable Old Methods ------------------------
+    // ------------------------------------------------------------------
+    
+    @Override
+    public void add(int hunger, float saturation)
+    {}
+
+    @Override
+    public void eat(FoodComponent food)
+    {}
 
     @Override
     public int getFoodLevel() 
@@ -255,18 +343,21 @@ public class CustomHungerManager extends HungerManager
     public void addExhaustion(float exhaustion)
     {}
 
+    @Override
     public float getExhaustion()
     {
         return 0;
     }
-
+    
+    @Override
     public void setFoodLevel(int foodLevel)
     {}
 
+    @Override
     public void setSaturationLevel(float saturationLevel)
     {}
 
+    @Override
     public void setExhaustion(float exhaustion)
     {}
-
 }

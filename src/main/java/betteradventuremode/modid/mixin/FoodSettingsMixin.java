@@ -13,7 +13,7 @@ import net.minecraft.item.Items;
 @Mixin(FoodComponents.class)
 public class FoodSettingsMixin 
 {   
-    // Nutrition is used for the health increase
+    // Nutrition is used for the health increase. Give health in 2's.
     // Satuartion is used on the time in seconds. Giving an extra 60s feels better.
 
     @Shadow
@@ -33,10 +33,10 @@ public class FoodSettingsMixin
 	
     @Shadow
     public static final FoodComponent BREAD = new FoodComponent.Builder().nutrition(5).saturationModifier(660.0F).alwaysEdible().build();
-	
+
     @Shadow
     public static final FoodComponent CARROT = new FoodComponent.Builder().nutrition(3).saturationModifier(360.0F).alwaysEdible().build();
-	
+
     @Shadow
     public static final FoodComponent CHICKEN = new FoodComponent.Builder()
 		.nutrition(2)

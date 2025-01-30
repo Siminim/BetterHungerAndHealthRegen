@@ -9,7 +9,7 @@ import net.minecraft.entity.player.PlayerEntity;
 
 
 @Mixin(InGameHud.class)
-public class MixinInGameHud 
+public class InGameHudMixin 
 {
     /**
      * Overwrite the renderFood method to remove it.

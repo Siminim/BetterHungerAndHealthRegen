@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 import com.google.common.collect.ImmutableList;
@@ -13,7 +14,7 @@ import net.minecraft.component.type.FoodComponent;
 import net.minecraft.item.ItemStack;
 
 @Mixin(FoodComponent.Builder.class)
-public class FoodComponentMixin 
+public class FoodComponentBuilderMixin 
 {
     @Shadow
     private int nutrition;
@@ -33,9 +34,17 @@ public class FoodComponentMixin
     @Shadow
     private final ImmutableList.Builder<FoodComponent.StatusEffectEntry> effects = ImmutableList.builder();
 
+    @Unique
+    private float regenAmount;
+
     @ModifyReturnValue(method = "build", at = @At("RETURN"))
     private FoodComponent onBuild(FoodComponent original) 
     {
-		return new FoodComponent(this.nutrition, this.saturationModifier, this.canAlwaysEat, this.eatSeconds, this.usingConvertsTo, this.effects.build());
+		  return new FoodComponent(this.nutrition, this.saturationModifier, this.canAlwaysEat, this.eatSeconds, this.usingConvertsTo, this.effects.build());
+    }
+
+    public FoodComponent moddedBuild()
+    {
+         return new FoodComponent(this.nutrition, this.saturationModifier, this.canAlwaysEat, this.eatSeconds, this.usingConvertsTo, this.effects.build());
     }
 }

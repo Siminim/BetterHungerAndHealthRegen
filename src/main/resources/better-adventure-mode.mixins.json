@@ -7,18 +7,18 @@
 		"PlayerEntityMixin",
 		"FoodSettingsMixin",
 		"FoodItemsMixin",
-		"FoodComponentMixin"
+		"FoodComponentBuilderMixin"
 	],
 	"client": 
 	[
-		"MixinInGameHud"
+		"InGameHudMixin"
 	],
 	"server":
 	[
 		"PlayerEntityMixin",
 		"FoodSettingsMixin",
 		"FoodItemsMixin",
-		"FoodComponentMixin"
+		"FoodComponentBuilderMixin"
 	],
 
 	"injectors": 
