@@ -3,6 +3,7 @@ package betteradventuremode.modid.mixin;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -17,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 
+import betteradventuremode.modid.BetterAdventureMode;
 import betteradventuremode.modid.CustomHungerManager;
 
 @Mixin(PlayerEntity.class)
@@ -44,6 +46,15 @@ public class PlayerEntityMixin
     private void replaceHungerEat(World world, ItemStack stack, FoodComponent foodComponent, CallbackInfoReturnable<ItemStack> cir) 
     {
         customHungerManager.eat(foodComponent, stack);
+    }
+
+    @Inject(method = "damage", at = @At(value = "TAIL"))
+    private void onDamage(CallbackInfoReturnable<ItemStack> cir)
+    {
+        if (!cir.getReturnValueZ())
+            return;
+        
+        customHungerManager.applyDamageRegenerationPenalty();
     }
 
     @ModifyReturnValue(method = "canConsume", at = @At(value = "RETURN"))

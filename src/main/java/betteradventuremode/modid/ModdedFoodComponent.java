@@ -1,7 +1,6 @@
 package betteradventuremode.modid;
 
 import java.util.IdentityHashMap;
-import java.util.WeakHashMap;
 
 import net.minecraft.component.type.FoodComponent;
 

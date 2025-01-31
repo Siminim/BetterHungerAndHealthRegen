@@ -16,6 +16,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 
 public class CustomHungerManager extends HungerManager
 {
@@ -25,12 +26,13 @@ public class CustomHungerManager extends HungerManager
     // should be in a config file
     public static final int maxFoodItems = 3;
     public static final float NEW_MAX_HEALTH = 6.0f; 
-    public static final float regenerationSeconds = 30.0f;
+    public static final float regenerationSeconds = 20.0f;
 
     public ItemStack[] itemsEaten = new ItemStack[maxFoodItems];
     public int[] itemsEatenTime = new int[maxFoodItems];
 
     private float regenTime = 0.0f;
+    private float timeAtMaxHealth = 0.0f;
 
     private final PlayerEntity player;
 
@@ -158,12 +160,23 @@ public class CustomHungerManager extends HungerManager
         }
 	}
 
-    // Takes seconds to regenerate health starting from when you first lose health.
-    // I want to implement a system that resets (or lowers) the counter when you take damage.
-    // Sturdy variable in foods which would help with getting hit and losing regeneration time.
     private void regenerationCounter()
     {
+        if (player.getHealth() == player.getMaxHealth())
+            timeAtMaxHealth += 1.0f;
+        else
+            timeAtMaxHealth = 0.0f;
+
+
+        if (timeAtMaxHealth > 100.0f) // 5 seconds
+        {
+            regenTime = 0.0f;
+            return;
+        }
+
+
         regenTime += 1.0f;
+        player.sendMessage(Text.of(String.valueOf(regenTime)));
 
         if (regenTime < regenerationSeconds * 20.0f) // Ticks
             return;
@@ -179,6 +192,11 @@ public class CustomHungerManager extends HungerManager
         }
         player.heal(regen);
         regenTime = 0.0f;
+    }
+
+    public void applyDamageRegenerationPenalty()
+    {
+        regenTime = Float.max(0, regenTime - 30.0f);
     }
 
     // ------------------------------------------------------------------
