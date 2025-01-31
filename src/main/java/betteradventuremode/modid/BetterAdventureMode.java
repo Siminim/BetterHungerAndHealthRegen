@@ -17,7 +17,6 @@ public class BetterAdventureMode implements ModInitializer
 	{
 		PayloadServer.registerPayloads();
 		Commands.onInitialize();
-		ModdedFoodComponent.onInitialize();
 		CustomHungerManager.setPlayerHungerManagerEvents();
 	}
 }

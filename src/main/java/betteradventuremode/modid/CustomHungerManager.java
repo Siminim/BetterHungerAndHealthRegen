@@ -25,6 +25,7 @@ public class CustomHungerManager extends HungerManager
     // should be in a config file
     public static final int maxFoodItems = 3;
     public static final float NEW_MAX_HEALTH = 6.0f; 
+    public static final float regenerationSeconds = 30.0f;
 
     public ItemStack[] itemsEaten = new ItemStack[maxFoodItems];
     public int[] itemsEatenTime = new int[maxFoodItems];
@@ -59,14 +60,14 @@ public class CustomHungerManager extends HungerManager
             if (itemsEaten[i] == null)
             {
                 itemsEaten[i] = new ItemStack(item.getRegistryEntry());
-                itemsEatenTime[i] = mfood.getDuration();
+                itemsEatenTime[i] = (int)mfood.getDuration();
 
                 updateMaxHealth();
                 break;
             }
             else if (item.getItem() == itemsEaten[i].getItem())
             {
-                itemsEatenTime[i] = mfood.getDuration();
+                itemsEatenTime[i] = (int)mfood.getDuration();
                 break;
             }
         }
@@ -132,7 +133,7 @@ public class CustomHungerManager extends HungerManager
     public void updateMaxHealth()
     {
         float health = NEW_MAX_HEALTH;
-        
+
         for (int i = 0; i < maxFoodItems; i++)
         {
             if (itemsEaten[i] == null)
@@ -142,7 +143,6 @@ public class CustomHungerManager extends HungerManager
             ModdedFoodComponent mfood = ModdedFoodComponent.getModdedFoodComponent(food);
             health += mfood.getHealthBoost();
         }
-
         setPlayerMaxHealth(player, health);
     }
 
@@ -154,18 +154,18 @@ public class CustomHungerManager extends HungerManager
         // Ensure the player's health is not greater than the new max health
         if (player.getHealth() > health) 
 		{
-            player.setHealth((float) health);
+            player.setHealth(health);
         }
 	}
 
-    // Takes 20 seconds to regenerate health starting from when you first lose health.
+    // Takes seconds to regenerate health starting from when you first lose health.
     // I want to implement a system that resets (or lowers) the counter when you take damage.
     // Sturdy variable in foods which would help with getting hit and losing regeneration time.
     private void regenerationCounter()
     {
         regenTime += 1.0f;
 
-        if (regenTime < 400.0f)
+        if (regenTime < regenerationSeconds * 20.0f) // Ticks
             return;
 
         float regen = 0.0f;
