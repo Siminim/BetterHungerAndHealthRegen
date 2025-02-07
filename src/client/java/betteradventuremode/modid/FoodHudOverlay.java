@@ -29,7 +29,7 @@ public class FoodHudOverlay implements HudRenderCallback
         
         CustomHungerManager customHungerManager = (CustomHungerManager)player.getHungerManager();
 
-        for (int i = 0; i < CustomHungerManager.maxFoodItems; i++)
+        for (int i = 0; i < CustomHungerManager.MaxFoodItems; i++)
         {
             int startX = x + 41 + (i * 16);
             int startY = y - 47;

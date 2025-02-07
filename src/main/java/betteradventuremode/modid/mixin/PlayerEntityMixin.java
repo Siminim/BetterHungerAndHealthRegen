@@ -3,7 +3,6 @@ package betteradventuremode.modid.mixin;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -18,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 
-import betteradventuremode.modid.BetterAdventureMode;
 import betteradventuremode.modid.CustomHungerManager;
 
 @Mixin(PlayerEntity.class)
@@ -81,7 +79,7 @@ public class PlayerEntityMixin
             if (food.canAlwaysEat())
                 return true;
 
-            for (int i = 0; i < CustomHungerManager.maxFoodItems; i++)
+            for (int i = 0; i < CustomHungerManager.MaxFoodItems; i++)
             {
                 if (food != null && food == customHungerManager.itemsEaten[i].get(DataComponentTypes.FOOD))
                     return true;

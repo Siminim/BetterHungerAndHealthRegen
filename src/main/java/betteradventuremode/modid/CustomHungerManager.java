@@ -16,25 +16,21 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 
 public class CustomHungerManager extends HungerManager
-{
-    private static final int MAX_FOOD_LEVEL = 20;
-    private static final float MAX_SATURATION_LEVEL = MAX_FOOD_LEVEL;
-    
+{   
     // should be in a config file
-    public static final int maxFoodItems = 3;
-    public static final float NEW_MAX_HEALTH = 6.0f; 
-    public static final float regenerationSeconds = 20.0f;
+    public static final int MaxFoodItems = 3;
+    public static final float NewMaxHealth = 6.0f; 
+    public static final float TimeToRegenerationSeconds = 20.0f;
 
-    public ItemStack[] itemsEaten = new ItemStack[maxFoodItems];
-    public int[] itemsEatenTime = new int[maxFoodItems];
-
-    private float regenTime = 0.0f;
-    private float timeAtMaxHealth = 0.0f;
+    public ItemStack[] itemsEaten = new ItemStack[MaxFoodItems];
+    public int[] itemsEatenTime = new int[MaxFoodItems];
 
     private final PlayerEntity player;
+    
+    private float regenTickCounter = 0.0f;
+    private float ticksAtMaxHealth = 0.0f;
 
     public CustomHungerManager(PlayerEntity player) 
     {
@@ -57,7 +53,7 @@ public class CustomHungerManager extends HungerManager
         if (mfood == null)
             return;
 
-        for (int i = 0; i < maxFoodItems; i++)
+        for (int i = 0; i < MaxFoodItems; i++)
         {
             if (itemsEaten[i] == null)
             {
@@ -79,7 +75,7 @@ public class CustomHungerManager extends HungerManager
 
     private void foodCountDown()
     {
-        for (int i = 0; i < maxFoodItems; i++)
+        for (int i = 0; i < MaxFoodItems; i++)
         {
             if (itemsEaten[i] == null)
                 break;
@@ -98,7 +94,7 @@ public class CustomHungerManager extends HungerManager
     {
         itemsEaten[slot] = null;
 
-        for (int i = slot + 1; i < maxFoodItems; i++)
+        for (int i = slot + 1; i < MaxFoodItems; i++)
         {
             itemsEaten[i - 1] = itemsEaten[i];
             itemsEatenTime[i - 1] = itemsEatenTime[i]; 
@@ -114,7 +110,7 @@ public class CustomHungerManager extends HungerManager
 
     public void clearFoods()
     {
-        for (int i = 0; i < maxFoodItems; i++)
+        for (int i = 0; i < MaxFoodItems; i++)
         {
             itemsEaten[i] = null;
             itemsEatenTime[i] = 0;
@@ -134,9 +130,9 @@ public class CustomHungerManager extends HungerManager
 
     public void updateMaxHealth()
     {
-        float health = NEW_MAX_HEALTH;
+        float health = NewMaxHealth;
 
-        for (int i = 0; i < maxFoodItems; i++)
+        for (int i = 0; i < MaxFoodItems; i++)
         {
             if (itemsEaten[i] == null)
                 break;
@@ -163,40 +159,41 @@ public class CustomHungerManager extends HungerManager
     private void regenerationCounter()
     {
         if (player.getHealth() == player.getMaxHealth())
-            timeAtMaxHealth += 1.0f;
-        else
-            timeAtMaxHealth = 0.0f;
-
-
-        if (timeAtMaxHealth > 100.0f) // 5 seconds
         {
-            regenTime = 0.0f;
-            return;
+            ticksAtMaxHealth += 1.0f;
+            
+            if (ticksAtMaxHealth > 100.0f) // 5 seconds
+            {
+                regenTickCounter = 0.0f;
+                return;
+            }
+        }
+        else
+        {
+            ticksAtMaxHealth = 0.0f;
         }
 
+        regenTickCounter += 1.0f;
 
-        regenTime += 1.0f;
-        player.sendMessage(Text.of(String.valueOf(regenTime)));
-
-        if (regenTime < regenerationSeconds * 20.0f) // Ticks
+        if (regenTickCounter < TimeToRegenerationSeconds * 20.0f || player.getHealth() == player.getMaxHealth()) // Ticks
             return;
 
-        float regen = 0.0f;
-        for (int i = 0; i < maxFoodItems; i++)
+        float regenHealth = 0.0f;
+        for (int i = 0; i < MaxFoodItems; i++)
         {
             if (itemsEaten[i] == null)
                 break;
 
             FoodComponent food = itemsEaten[i].get(DataComponentTypes.FOOD);
-            regen += ModdedFoodComponent.getModdedFoodComponent(food).getRegeneration();
+            regenHealth += ModdedFoodComponent.getModdedFoodComponent(food).getRegeneration();
         }
-        player.heal(regen);
-        regenTime = 0.0f;
+        player.heal(regenHealth);
+        regenTickCounter = 0.0f;
     }
 
     public void applyDamageRegenerationPenalty()
     {
-        regenTime = Float.max(0, regenTime - 30.0f);
+        regenTickCounter = Float.max(0, regenTickCounter - 30.0f);
     }
 
     // ------------------------------------------------------------------
@@ -235,7 +232,7 @@ public class CustomHungerManager extends HungerManager
         if (player.getWorld().isClient())
             return;
 
-        for (int i = 0; i < maxFoodItems; i++)
+        for (int i = 0; i < MaxFoodItems; i++)
         {
             if (itemsEaten[i] == null)
                 ServerPlayNetworking.send((ServerPlayerEntity)player, new FoodEmptyPayload(i));
@@ -249,7 +246,7 @@ public class CustomHungerManager extends HungerManager
         if (player.getWorld().isClient())
             return;
 
-        for (int i = 0; i < maxFoodItems; i++)
+        for (int i = 0; i < MaxFoodItems; i++)
         {
             if (itemsEatenTime[i] <= 0 || itemsEatenTime[0] % 20 != 0)
                 break;
@@ -267,7 +264,7 @@ public class CustomHungerManager extends HungerManager
     {        
         NbtList nbtList = nbt.getList("FoodItems", NbtElement.COMPOUND_TYPE);
         
-        int maxSize = maxFoodItems < nbtList.size() ? maxFoodItems : nbtList.size();
+        int maxSize = MaxFoodItems < nbtList.size() ? MaxFoodItems : nbtList.size();
         
         for (int i = 0; i < maxSize; i++)
         {
@@ -290,7 +287,7 @@ public class CustomHungerManager extends HungerManager
            
         NbtList nbtList = new NbtList();
         
-        for (int i = 0; i < maxFoodItems; i++)
+        for (int i = 0; i < MaxFoodItems; i++)
         {
             if (itemsEaten[i] == null)
                 break;
@@ -335,19 +332,19 @@ public class CustomHungerManager extends HungerManager
     @Override
     public int getFoodLevel() 
     {
-        return MAX_FOOD_LEVEL;
+        return 20; // Default Max Food Value
     }
 
     @Override
     public int getPrevFoodLevel()
     {
-        return MAX_FOOD_LEVEL;
+        return 20; // Default Max Food Value
     }
 
     @Override
     public float getSaturationLevel() 
     {
-        return MAX_SATURATION_LEVEL;
+        return 20; // Default Max Saturation Value
     }
 
     @Override
