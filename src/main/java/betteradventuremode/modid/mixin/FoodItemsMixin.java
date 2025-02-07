@@ -23,7 +23,7 @@ public class FoodItemsMixin
 
     @Shadow
     public static final Item COOKIE = Items.register("cookie", new FoodTooltipItem(new Item.Settings().maxCount(32).food(FoodComponents.COOKIE),
-                                                                                      new ModdedFoodComponent(FoodComponents.COOKIE, 1, 1.0f, 180)));
+                                                                                      new ModdedFoodComponent(FoodComponents.COOKIE, 1, 2.0f, 180)));
 
     @Shadow
     public static final Item DRIED_KELP = Items.register("dried_kelp", new FoodTooltipItem(new Item.Settings().maxCount(32).food(FoodComponents.DRIED_KELP),
@@ -53,11 +53,11 @@ public class FoodItemsMixin
     
     @Shadow
     public static final Item MELON_SLICE = Items.register("melon_slice", new FoodTooltipItem(new Item.Settings().maxCount(16).food(FoodComponents.MELON_SLICE),
-                                                                                                new ModdedFoodComponent(FoodComponents.MELON_SLICE, 2, 1.5f, 360)));
+                                                                                                new ModdedFoodComponent(FoodComponents.MELON_SLICE, 2, 1.0f, 360)));
     
     @Shadow
     public static final Item APPLE = Items.register("apple", new FoodTooltipItem(new Item.Settings().maxCount(16).food(FoodComponents.APPLE),
-                                                                                    new ModdedFoodComponent(FoodComponents.APPLE, 2, 1.5f, 360)));
+                                                                                    new ModdedFoodComponent(FoodComponents.APPLE, 2, 1.0f, 360)));
 
     @Shadow
     public static final Item BEETROOT = Items.register("beetroot", new FoodTooltipItem(new Item.Settings().maxCount(16).food(FoodComponents.BEETROOT),
@@ -65,11 +65,11 @@ public class FoodItemsMixin
 
     @Shadow
     public static final Item CARROT = Items.register("carrot", new FoodAliasedBlockTooltipItem(Blocks.CARROTS, new Item.Settings().maxCount(16).food(FoodComponents.CARROT),
-                                                                                                    new ModdedFoodComponent(FoodComponents.CARROT, 2, 1.5f, 360)));
+                                                                                                    new ModdedFoodComponent(FoodComponents.CARROT, 2, 1.0f, 360)));
 
     @Shadow
     public static final Item POTATO = Items.register("potato", new FoodAliasedBlockTooltipItem(Blocks.POTATOES, new Item.Settings().maxCount(16).food(FoodComponents.POTATO),
-                                                                                                  new ModdedFoodComponent(FoodComponents.POTATO, 2, 1.5f, 360)));
+                                                                                                  new ModdedFoodComponent(FoodComponents.POTATO, 2, 1.0f, 360)));
 
     // @Shadow
     // public static final Item POISONOUS_POTATO = Items.register("poisonous_potato", new Item(new Item.Settings().maxCount(16).food(FoodComponents.POISONOUS_POTATO)));
@@ -118,39 +118,39 @@ public class FoodItemsMixin
     // ---------------------------------------------------------------------
     @Shadow
     public static final Item BREAD = Items.register("bread", new FoodTooltipItem(new Item.Settings().maxCount(8).food(FoodComponents.BREAD), 
-                                                                                    new ModdedFoodComponent(FoodComponents.BREAD, 3.0f, 1.0f, 660)));
+                                                                                    new ModdedFoodComponent(FoodComponents.BREAD, 2.0f, 2.0f, 660)));
 
     @Shadow
     public static final Item BAKED_POTATO = Items.register("baked_potato", new FoodTooltipItem(new Item.Settings().maxCount(8).food(FoodComponents.BAKED_POTATO),
-                                                                                                    new ModdedFoodComponent(FoodComponents.BAKED_POTATO, 3.0f, 1.0f, 960)));
+                                                                                                    new ModdedFoodComponent(FoodComponents.BAKED_POTATO, 3.0f, 2.0f, 960)));
 
     @Shadow
     public static final Item COOKED_PORKCHOP = Items.register("cooked_porkchop", new FoodTooltipItem(new Item.Settings().maxCount(8).food(FoodComponents.COOKED_PORKCHOP),
-                                                                                                        new ModdedFoodComponent(FoodComponents.COOKED_PORKCHOP, 4.0f, 1.5f, 1260)));
+                                                                                                        new ModdedFoodComponent(FoodComponents.COOKED_PORKCHOP, 4.0f, 1.0f, 1260)));
 
     @Shadow
     public static final Item COOKED_BEEF = Items.register("cooked_beef", new FoodTooltipItem(new Item.Settings().maxCount(8).food(FoodComponents.COOKED_BEEF),
-                                                                                                new ModdedFoodComponent(FoodComponents.COOKED_BEEF, 4, 1.5f, 1260)));
+                                                                                                new ModdedFoodComponent(FoodComponents.COOKED_BEEF, 4, 1.0f, 1260)));
 
     @Shadow
     public static final Item COOKED_CHICKEN = Items.register("cooked_chicken", new FoodTooltipItem(new Item.Settings().maxCount(8).food(FoodComponents.COOKED_CHICKEN),
-                                                                                                     new ModdedFoodComponent(FoodComponents.COOKED_CHICKEN, 4, 1.5f, 960)));
+                                                                                                     new ModdedFoodComponent(FoodComponents.COOKED_CHICKEN, 4, 1.0f, 960)));
 
     @Shadow
     public static final Item COOKED_MUTTON = Items.register("cooked_mutton", new FoodTooltipItem(new Item.Settings().maxCount(8).food(FoodComponents.COOKED_MUTTON),
-                                                                                                    new ModdedFoodComponent(FoodComponents.COOKED_MUTTON, 4, 1.5f, 960)));
+                                                                                                    new ModdedFoodComponent(FoodComponents.COOKED_MUTTON, 4, 1.0f, 960)));
 
     @Shadow
     public static final Item COOKED_RABBIT = Items.register("cooked_rabbit", new FoodTooltipItem(new Item.Settings().maxCount(8).food(FoodComponents.COOKED_RABBIT),
-                                                                                                    new ModdedFoodComponent(FoodComponents.COOKED_RABBIT, 4.0f, 1.5f, 960)));
+                                                                                                    new ModdedFoodComponent(FoodComponents.COOKED_RABBIT, 4.0f, 1.0f, 960)));
 
     @Shadow
-	public static final Item COOKED_COD = Items.register("cooked_cod", new FoodTooltipItem(new Item.Settings().maxCount(8).food(FoodComponents.COOKED_COD),
-                                                                                            new ModdedFoodComponent(FoodComponents.COOKED_COD, 4.0f, 1.5f, 960)));
+	  public static final Item COOKED_COD = Items.register("cooked_cod", new FoodTooltipItem(new Item.Settings().maxCount(8).food(FoodComponents.COOKED_COD),
+                                                                                            new ModdedFoodComponent(FoodComponents.COOKED_COD, 4.0f, 1.0f, 960)));
 	
     @Shadow
     public static final Item COOKED_SALMON = Items.register("cooked_salmon", new FoodTooltipItem(new Item.Settings().maxCount(8).food(FoodComponents.COOKED_SALMON),
-                                                                                                     new ModdedFoodComponent(FoodComponents.COOKED_SALMON, 4, 1.5f, 960)));
+                                                                                                     new ModdedFoodComponent(FoodComponents.COOKED_SALMON, 4, 1.0f, 960)));
 
 
     // ---------------------------------------------------------------------
@@ -169,15 +169,15 @@ public class FoodItemsMixin
     public static final Item GOLDEN_APPLE = Items.register("golden_apple", new FoodTooltipItem(new Item.Settings().maxCount(4).rarity(Rarity.RARE).food(FoodComponents.GOLDEN_APPLE),
                                                                                                     new ModdedFoodComponent(FoodComponents.GOLDEN_APPLE, 4, 1.0f, 660)));
     @Shadow
-    public static final Item BEETROOT_SOUP = Items.register("beetroot_soup", new FoodTooltipItem(new Item.Settings().maxCount(1).food(FoodComponents.BEETROOT_SOUP),
+    public static final Item BEETROOT_SOUP = Items.register("beetroot_soup", new FoodTooltipItem(new Item.Settings().maxCount(4).food(FoodComponents.BEETROOT_SOUP),
                                                                                                   new ModdedFoodComponent(FoodComponents.BEETROOT_SOUP, 4, 2.0f, 1860)));
 
     @Shadow
-    public static final Item MUSHROOM_STEW = Items.register("mushroom_stew", new FoodTooltipItem(new Item.Settings().maxCount(1).food(FoodComponents.MUSHROOM_STEW),
+    public static final Item MUSHROOM_STEW = Items.register("mushroom_stew", new FoodTooltipItem(new Item.Settings().maxCount(4).food(FoodComponents.MUSHROOM_STEW),
                                                                                                   new ModdedFoodComponent(FoodComponents.MUSHROOM_STEW, 4, 2.0f, 1860)));
 
     @Shadow
-    public static final Item RABBIT_STEW = Items.register("rabbit_stew", new FoodTooltipItem(new Item.Settings().maxCount(1).food(FoodComponents.RABBIT_STEW),
+    public static final Item RABBIT_STEW = Items.register("rabbit_stew", new FoodTooltipItem(new Item.Settings().maxCount(4).food(FoodComponents.RABBIT_STEW),
                                                                                                 new ModdedFoodComponent(FoodComponents.RABBIT_STEW, 4, 2.0f, 1860)));
 
 
